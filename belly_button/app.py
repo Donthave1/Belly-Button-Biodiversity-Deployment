@@ -1,6 +1,6 @@
 import os
 
-import pandas as pd
+# import pandas as pd
 import numpy as np
 
 import sqlalchemy
@@ -31,12 +31,6 @@ Base.prepare(db.engine, reflect=True)
 Samples_Metadata = Base.classes.sample_metadata
 Samples = Base.classes.samples
 
-class Belly_Button(db.Model):
-    __tablename__ = "belly_button"
-
-    otu_ids = db.Column(db.Integer, primary_key=True)
-    otu_labels = db.Column(db.String)
-    sample_values = db.Column(db.Integer)
 
 @app.route("/")
 def index():
