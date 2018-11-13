@@ -93,9 +93,9 @@ function buildCharts(sample) {
   });
 
   // BONUS: Build the Gauge Chart
-  let url3 = "/wfreq/" + sample;
+  let url3 = "/metadata/" + sample;
   d3.json(url3).then(function(gResponse) {
-    console.log(`This is ${gResponse}`)
+    
     let level = gResponse.WFREQ * 20;
     // Trig to calc meter point
     let degrees = 180 - level, 
