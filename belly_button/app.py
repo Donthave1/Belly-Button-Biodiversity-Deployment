@@ -108,18 +108,6 @@ def wfreq(sample):
     wfreq_query = db.session.query(Samples_Metadata.WFREQ).all()
     return jsonify(wfreq_query[0][0])
 
-@app.route("/api/pie")
-def draw_pie():
-    results = db.session.query(Belly_Button.otu_ids, Belly_Button.otu_labels, Belly_Button.sample_values).\
-        order_by(Belly_Button.sample_values.desc()).\
-        limit(10).all()
-    df = pd.DataFrame(results, columns=["Sample ID", "Sample Name", "Sample Values"])
-    pie_trace = [{
-        "values": df["Sample Values"].values.tolist(),
-        "labels": df["Sample ID"].values.tolist(),
-        "hovertext": df["Sample Name"].values.tolist()
-    }]
-    return jsonify(pie_trace)
 
 
 
