@@ -31,7 +31,12 @@ Base.prepare(db.engine, reflect=True)
 Samples_Metadata = Base.classes.sample_metadata
 Samples = Base.classes.samples
 
+class Belly_Button(db.Model):
+    __tablename__ = "belly_button"
 
+    otu_ids = db.Column(db.Integer, primary_key=True)
+    otu_labels = db.Column(db.String)
+    sample_values = db.Column(db.Integer)
 
 @app.route("/")
 def index():
@@ -97,6 +102,24 @@ def samples(sample):
         "otu_labels": sample_data.otu_label.tolist(),
     }
     return jsonify(data)
+
+@app.route("/wfreq/<sample>")
+def wfreq(sample):
+    wfreq_query = db.session.query(Samples_Metadata.WFREQ).all()
+    return jsonify(wfreq_query[0][0])
+
+@app.route("/api/pie")
+def draw_pie():
+    results = db.session.query(Belly_Button.otu_ids, Belly_Button.otu_labels, Belly_Button.sample_values).\
+        order_by(Belly_Button.sample_values.desc()).\
+        limit(10).all()
+    df = pd.DataFrame(results, columns=["Sample ID", "Sample Name", "Sample Values"])
+    pie_trace = [{
+        "values": df["Sample Values"].values.tolist(),
+        "labels": df["Sample ID"].values.tolist(),
+        "hovertext": df["Sample Name"].values.tolist()
+    }]
+    return jsonify(pie_trace)
 
 
 
